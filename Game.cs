@@ -5,15 +5,53 @@ using System.Collections.Generic;
 
 namespace Asteroids
 {
+    // 1. Добавить в программу коллекцию астероидов. Как только она заканчивается(все астероиды сбиты), формируется новая коллекция, в которой на один астероид больше.
+    // 2. Дана коллекция List<T>. Требуется подсчитать, сколько раз каждый элемент встречается в данной коллекции:
+    //    для целых чисел;
+    //    a. * для обобщенной коллекции;
+    //    b. ** используя Linq.
+    //Дмитрий Волков
+
+    internal class AsteroidsEventArgs : EventArgs
+    {
+        private readonly int f_oldCount;
+        public AsteroidsEventArgs(int count)
+        {
+            f_oldCount = count;
+        }
+        public int oldCount => f_oldCount;
+    }
 
     internal static class Game
     {
         private static Timer timer = new Timer() { Interval = 30 };
         private static Timer rndTimer = new Timer() { Interval = 3000 };
-        private static int XP = 0;
         public static Random rnd = new Random();
+        /// <summary>
+        /// Количество сбитых астероидов
+        /// </summary>
+        private static int XP = 0;
+        /// <summary>
+        /// Счётчик для генерации новой волны астероидов
+        /// </summary>
+        private static int asteroidsCount = 3;
+        /// <summary>
+        /// Количество пуль на полотне
+        /// </summary>
+        private static int amountOfBullets = 4;
 
         private static BufferedGraphicsContext _context;
+        private static event EventHandler<AsteroidsEventArgs> onAsteroidsEmpty;
+
+        private static void RespawnAsteroids(object sender, AsteroidsEventArgs e)
+        {
+            for (var i = 0; i < e.oldCount + 1; i++)
+            {
+                int r = rnd.Next(5, 50);
+                _asteroids.Add(new Asteroid(new Point(1000, rnd.Next(0, Game.Height - r)), new Point(-r / 5, r), new Size(r, r), rnd.Next(4, 10)));
+            }
+            Logger.LogMessage($"New wave of asteroids. {e.oldCount + 1}");
+        }
 
         /// <summary>
         /// Хранилище фоновых объектов
@@ -44,8 +82,10 @@ namespace Asteroids
         private static void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ControlKey)
-                if (_bullets.Count < 4)
+                if (_bullets.Count <= amountOfBullets)
+                {
                     _bullets.Add(new Bullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4), new Point(4, 0), new Size(4, 1)));
+                }
             if (e.KeyCode == Keys.Up) _ship.Up();
             if (e.KeyCode == Keys.Down) _ship.Down();
         }
@@ -72,6 +112,7 @@ namespace Asteroids
 
             // Связываем буфер в памяти с графическим объектом, чтобы рисовать в буфере
             Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
+            onAsteroidsEmpty += RespawnAsteroids;
             Load();
             timer.Start();
             timer.Tick += Timer_Tick;
@@ -121,7 +162,7 @@ namespace Asteroids
                 Buffer.Graphics.DrawString("Energy: " + _ship.Energy, SystemFonts.DefaultFont, Brushes.White, 0, 0);
 
             Buffer.Graphics.DrawString("XP: " + XP, SystemFonts.DefaultFont, Brushes.White, 0, 14);
-            Buffer.Graphics.DrawString("Amount of bullets: " + _bullets.Count, SystemFonts.DefaultFont, Brushes.White, 0, 28);
+            Buffer.Graphics.DrawString("Amount of bullets: " + (amountOfBullets - _bullets.Count), SystemFonts.DefaultFont, Brushes.White, 0, 28);
 
             Buffer.Render();
         }
@@ -202,6 +243,10 @@ namespace Asteroids
             for (int i = _aidKits.Count-1; i >= 0; i--)
                 if (!_aidKits[i].DrawStatus)
                     _aidKits.Remove(_aidKits[i]);
+
+            // Волна астероидов
+            if (_asteroids.Count < 1)
+                onAsteroidsEmpty(null, new AsteroidsEventArgs(asteroidsCount++));
         }
 
         public static void Load()
@@ -220,11 +265,7 @@ namespace Asteroids
                 _bg_objects[i] = new Star(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r, r), new Size(3, 3));
             }
 
-            for (var i = 0; i < 3; i++)
-            {
-                int r = rnd.Next(5, 50);
-                _asteroids.Add( new Asteroid(new Point(1000, rnd.Next(0, Game.Height-r)), new Point(-r / 5, r), new Size(r, r), rnd.Next(4, 10)) );
-            }
+            onAsteroidsEmpty(null, new AsteroidsEventArgs(asteroidsCount));
         }
 
         public static void Finish()
