@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asteroids", "Asteroids.csproj", "{3851E8B0-0038-482F-949A-E0B4448D5368}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson-4-task-2", "lesson-4-task-2\lesson-4-task-2.csproj", "{4C774A4B-48D1-497C-8DB2-E4710F28342D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3851E8B0-0038-482F-949A-E0B4448D5368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3851E8B0-0038-482F-949A-E0B4448D5368}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3851E8B0-0038-482F-949A-E0B4448D5368}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3851E8B0-0038-482F-949A-E0B4448D5368}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C774A4B-48D1-497C-8DB2-E4710F28342D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C774A4B-48D1-497C-8DB2-E4710F28342D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C774A4B-48D1-497C-8DB2-E4710F28342D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C774A4B-48D1-497C-8DB2-E4710F28342D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {969BF484-F659-4E7F-8283-3724A3204BE3}
+	EndGlobalSection
+EndGlobal
