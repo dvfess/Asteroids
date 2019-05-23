@@ -124,7 +124,7 @@ namespace Asteroids
 
         private static void RndTimer_Tik(object sender, System.EventArgs e)
         {
-            if (_ship.Energy < 5)
+            if (_ship.Energy < 5 && _sip.Energy > 0)
             {
                 rndTimer.Interval = rnd.Next(5, 15) * 1000;
                 int r = rnd.Next(7, 10);

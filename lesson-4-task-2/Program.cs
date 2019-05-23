@@ -46,6 +46,15 @@ namespace lesson_4_task_2
 
             foreach (KeyValuePair<int, int> item in list.DoIt())
                 Console.WriteLine($"{item.Key} - {item.Value}");
+
+            Console.WriteLine();
+
+            var query = from data in list
+                        group data by data into g
+                        select new { num = g.Key, count = g.Count()};
+
+            foreach (var group in query)
+                Console.WriteLine("{0} : {1}", group.num, group.count);
         }
     }
 }
